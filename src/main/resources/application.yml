@@ -49,26 +49,6 @@ spring:
     job:
       enabled: false
 
-allowed:
- origin: ${ALLOW_URL:http://localhost:4200},${ALLOW_URL:http://localhost:8081}
-
-
-security: 
- oauth2: 
-  client:
-   client-id: ${CLIENT_ID:myclientid}
-   client-secret: ${CLIENT_SECRET:myclientsecret}
-
-jwt: 
-  secret: ${JWT_SECRET:aGVsbG9ib3lzaWJvdWdodHNkZmdzZnNoZHNoZmRoc2hzaHNoc2hlbGxvYm95c2lib3VnaHRzZGZnc2ZzaGRzaGZkaHNoc2hzaHNoZWxsb2JveXNpYm91Z2h0c2RmZ3Nmc2hkc2hmZGhzaHNoc2hzaGVsbG9ib3lzaWJvdWdodHNkZmdzZnNoZHNoZmRoc2hzaHNoc2hlbGxvYm95c2lib3VnaHRzZGZnc2ZzaGRzaGZkaHNoc2hzaHNoZWxsb2JveXNpYm91Z2h0c2RmZ3Nmc2hkc2hmZGhzaHNoc2hz}
-  duration: ${JWT_DURATION:8640000}
-
-####
-## Patment Processing with stripe
-# Dummy key
-stripe: 
-  key: 
-   secret: ${STRIPE_SKEY:sk_test_51LeP5ZSTEbgQpy2wcWh9NByZsgonJqfKVkGxZitaX14DY2QEnkseKIydc9ehbv6p7Gy8yK8Ec2UbAUi6onJSPpCK00QXjAzyhk}
 
 server: 
  port: ${PORT:8080}
@@ -78,20 +58,3 @@ server:
     threads:
       worker: 64
       io: 4
-
-mail:
-  host: email-smtp.us-east-2.amazonaws.com
-  port: 587
-  username: AKIAUUAFN23IMHEPKBJX
-  password: BHufm3+0W4HJ8WSLsRSkSiDTFrM0BFNKFX6SX7IqnN+h
-  properties:
-    mail:
-      smtp:
-        ssl:
-          trust: "*"
-        auth: true
-        starttls:
-          enable: true
-        connectiontimeout: 5000
-        timeout: 3000
-        writetimeout: 5000

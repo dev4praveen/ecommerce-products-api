@@ -6,6 +6,7 @@ import org.product.entities.Product;
 import org.product.repositries.ApprovalQueueRepository;
 import org.product.repositries.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,26 +24,12 @@ public class ProductService {
         List<ProductDTO> productDTOS = products.stream().map(this::convertToDto).collect(Collectors.toList());
         return productDTOS;
     }
-//
-//    public List<Product> searchProducts(
-//            String productName, Double minPrice, Double maxPrice,
-//            LocalDateTime minPostedDate, LocalDateTime maxPostedDate
-//    ) {
-//        return productRepository.findByNameContainingAndPriceBetweenAndPostedDateBetween(
-//                productName, minPrice, maxPrice, minPostedDate, maxPostedDate
-//        );
-//    }
 
-//    public Product createProduct(Product product) {
-//        if (product.getPrice() > 10000) {
-//            product.setStatus(false);
-//        } else if (product.getPrice() > 5000) {
-//            product.setStatus(false); // Push to approval queue
-//        } else {
-//            product.setStatus(true);
-//        }
-//        return productRepository.save(product);
-//    }
+    public List<ProductDTO> searchProducts(Specification<Product> spec) {
+        List<Product> entityList = productRepository.findAll(spec);
+        List<ProductDTO> outPutDTO =entityList.stream().map(x ->convertToDto(x)).collect(Collectors.toList());
+        return outPutDTO;
+    }
 
     public ProductDTO createProduct(ProductDTO productDTO) {
         Product product = convertToEntity(productDTO, null);
@@ -56,21 +43,6 @@ public class ProductService {
         product = productRepository.save(product);
         return convertToDto(product);
     }
-
-//    public Product updateProduct(Long productId, Product updatedProduct) {
-//        Product existingProduct = productRepository.findById(productId)
-//                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-//
-//        if (updatedProduct.getPrice() > existingProduct.getPrice() * 1.5) {
-//            updatedProduct.setStatus(false); // Push to approval queue
-//        } else {
-//            updatedProduct.setStatus(true);
-//        }
-//
-//        updatedProduct.setId(productId);
-//        return productRepository.save(updatedProduct);
-//    }
-
 
     public ProductDTO updateProduct( Long productId, ProductDTO productDTO) {
 
@@ -86,14 +58,6 @@ public class ProductService {
         Product updatedClient = productRepository.save(updatedProduct);
         return convertToDto(updatedClient);
     }
-
-//    public void deleteProduct(Long productId) {
-//        Product existingProduct = productRepository.findById(productId)
-//                .orElseThrow(() -> new IllegalArgumentException("Product not found"));
-//        existingProduct.setStatus(false); // Push to approval queue
-//        productRepository.save(existingProduct);
-//    }
-
 
     public void deleteProduct(Long productId) {
         Product existingProduct = productRepository.findById(productId)

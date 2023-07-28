@@ -2,13 +2,17 @@ package org.product.resources;
 
 import lombok.extern.slf4j.Slf4j;
 import org.product.dto.ProductDTO;
+import org.product.entities.Product;
+import org.product.repositries.ProductRepository;
+import org.product.searchSpecification.ProductSearch;
 import org.product.services.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/products")
@@ -18,25 +22,22 @@ public class ProductResource {
     @Autowired
     private ProductService productService;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     @GetMapping
     public ResponseEntity<List<ProductDTO>> listActiveProducts() {
         List<ProductDTO> activeProducts = productService.getActiveProducts();
         return ResponseEntity.ok(activeProducts);
     }
 
-//    @GetMapping("/search")
-//    public ResponseEntity<List<Product>> searchProducts(
-//            @RequestParam(name = "productName", required = false) String productName,
-//            @RequestParam(name = "minPrice", required = false) Double minPrice,
-//            @RequestParam(name = "maxPrice", required = false) Double maxPrice,
-//            @RequestParam(name = "minPostedDate", required = false) LocalDateTime minPostedDate,
-//            @RequestParam(name = "maxPostedDate", required = false) LocalDateTime maxPostedDate
-//    ) {
-//        List<Product> searchResult = productService.searchProducts(
-//                productName, minPrice, maxPrice, minPostedDate, maxPostedDate
-//        );
-//        return ResponseEntity.ok(searchResult);
-//    }
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductDTO>> searchProducts( @RequestBody Map<String,String> map) {
+
+        Specification<Product> spec = ProductSearch.search(map);
+        List<ProductDTO> searchResult = productService.searchProducts(spec);
+        return  ResponseEntity.ok(searchResult);
+    }
 
     @PostMapping
     public ResponseEntity<ProductDTO> createProduct(@RequestBody ProductDTO productDTO) {
